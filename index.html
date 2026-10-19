@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Gusti Muhammad Malvin Athallahsyah — Backend Engineer, AI & Cloud.">
+    <title>Portfolio — Backend Engineer, AI & Cloud</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Cursor glow effect -->
+    <div id="cursorGlow"></div>
+    <div id="cursorDot"></div>
+
+    <!-- FMA Background Canvases -->
+    <canvas id="fmaCanvas"></canvas>
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- ─── TOP NAV ─── -->
+    <header class="top-bar">
+        <div class="top-bar__left">
+            <span class="top-bar__timezone" id="timezone">Asia/Jakarta</span>
+        </div>
+
+        <nav class="top-bar__nav" id="mainNav">
+            <span class="nav-pill" id="navPill"></span>
+            <button class="nav-tab active" data-section="heroSection" id="tabHome">HOME</button>
+            <button class="nav-tab" data-section="aboutSection" id="tabAbout">ABOUT</button>
+            <button class="nav-tab" data-section="experienceSection" id="tabExperience">EXPERIENCE</button>
+            <button class="nav-tab" data-section="projectsSection" id="tabProjects">PROJECTS</button>
+            <button class="nav-tab" data-section="skillsSection" id="tabSkills">SKILLS</button>
+            <button class="nav-tab" data-section="contactSection" id="tabContact">CONTACT</button>
+        </nav>
+
+        <div class="top-bar__right">
+            <span class="top-bar__clock" id="clock">00:00:00</span>
+        </div>
+    </header>
+
+    <!-- ─── HERO / HOME SECTION ─── -->
+    <section id="heroSection" class="hero-section">
+        <div class="hero-inner">
+            <h1 class="hero-title">
+                Reliable backends for <em class="hero-title__glow">real-time data.</em>
+            </h1>
+            <p class="hero-subtitle">
+                Backend &amp; Cloud Engineer building scalable APIs with Go, Python, and Laravel.<br>
+                From MTT pipelines at Turkish Aerospace to production-grade microservices.
+            </p>
+            <div class="hero-cta">
+                <button class="hero-btn hero-btn--primary" data-section="experienceSection">
+                    View Experience &nbsp;→
+                </button>
+                <a href="mailto:malvinathallahsyah04@gmail.com" class="hero-btn hero-btn--outline">
+                    Contact Me
+                </a>
+            </div>
+            <div class="hero-socials">
+                <a href="https://github.com/MalvinAthallahsyah" target="_blank" rel="noopener" class="hero-social"
+                    aria-label="GitHub">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/malvinathallahsyah" target="_blank" rel="noopener"
+                    class="hero-social" aria-label="LinkedIn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                </a>
+                <a href="https://www.instagram.com/athallahsyah._" target="_blank" rel="noopener" class="hero-social"
+                    aria-label="Instagram">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <circle cx="12" cy="12" r="4" />
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="hero-scroll-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+            <span>scroll</span>
+        </div>
+    </section>
+
+    <!-- ─── ABOUT SECTION ─── -->
+    <section id="aboutSection" class="page-section">
+        <div class="section-container">
+            <p class="section-label">ABOUT ME</p>
+            <h2 class="about-name">Hi, I'm Gusti Muhammad Malvin Athallahsyah</h2>
+            <p class="about-tagline">Backend &amp; Cloud Engineer</p>
+            <div class="about-bio">
+                <p>Backend &amp; Cloud Engineer specializing in scalable APIs and real-time data systems. I build
+                    high-performance APIs with Go, Python, and Laravel, and design reliable relational databases that
+                    power complex applications. With a strong foundation in algorithms, from state estimation with the
+                    Kalman Filter to data association with LAPJV.</p>
+                <p>I write efficient code that turns noisy, real-time data into dependable results. Currently focused on
+                    cloud deployment and AI-powered systems, bridging the gap between algorithms and production-ready
+                    software.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── EXPERIENCE SECTION ─── -->
+    <section id="experienceSection" class="page-section">
+        <div class="section-container">
+            <p class="section-label">PROFESSIONAL BACKGROUND</p>
+            <h2 class="section-heading">Work Experience</h2>
+
+            <div class="exp-list">
+                <div class="exp-card">
+                    <div class="exp-card__left">
+                        <div class="exp-card__logo">
+                            <img src="turkish_aerospace.jpg" alt="Turkish Aerospace" />
+                        </div>
+                        <div class="exp-card__time">Jun 2026 — Aug 2026</div>
+                    </div>
+                    <div class="exp-card__body">
+                        <h3 class="exp-card__role">Software Engineer Intern</h3>
+                        <p class="exp-card__company">Turkish Aerospace · Ankara, Türkiye · On-site</p>
+                        <ul class="exp-card__list">
+                            <li>Implemented Data Fusion, Kalman Filter, and LAPJV algorithms for a Multiple Target
+                                Tracking (MTT) system.</li>
+                            <li>Developed and evaluated the MTT pipeline to improve target tracking performance.</li>
+                            <li>Collaborated with engineers to test and validate tracking results.</li>
+                        </ul>
+                        <div class="exp-card__tags">
+                            <span>Kalman Filter</span><span>LAPJV</span><span>Data
+                                Fusion</span><span>MTT</span><span>Python</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PROJECTS SECTION ─── -->
+    <section id="projectsSection" class="page-section">
+        <div class="section-container section-container--wide">
+            <div class="pw-header">
+                <span class="pw-label">// selected_work</span>
+                <span class="pw-count">03 projects</span>
+            </div>
+
+            <!-- Project row 1 -->
+            <div class="pw-row">
+                <div class="pw-row__left">
+                    <span class="pw-row__num">01</span>
+                    <div class="pw-row__info">
+                        <h3 class="pw-row__title">Telkom Marketplace</h3>
+                        <p class="pw-row__desc">A full-featured marketplace platform built for Telkom ecosystem,
+                            featuring product listing, user authentication, and a seamless shopping experience.</p>
+                        <div class="pw-row__stack"><span>Laravel</span><span>PostgreSQL</span><span>REST
+                                API</span><span>PHP</span></div>
+                        <div class="pw-row__links">
+                            <a href="https://github.com/MalvinAthallahsyah" target="_blank" rel="noopener"
+                                class="pw-link">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                </svg>
+                                source code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pw-row__img-wrap">
+                    <img src="proj_marketplace.png" alt="Telkom Marketplace" />
+                </div>
+            </div>
+
+            <!-- Project row 2 -->
+            <div class="pw-row pw-row--alt">
+                <div class="pw-row__left">
+                    <span class="pw-row__num">02</span>
+                    <div class="pw-row__info">
+                        <h3 class="pw-row__title">VoltWise</h3>
+                        <p class="pw-row__desc">An energy monitoring dashboard that tracks electricity consumption in
+                            real-time, helping users save costs and support SDG 7 sustainable energy goals.</p>
+                        <div class="pw-row__stack">
+                            <span>Next.js</span><span>Node.js</span><span>PostgreSQL</span><span>Docker</span></div>
+                        <div class="pw-row__links">
+                            <a href="https://github.com/MalvinAthallahsyah" target="_blank" rel="noopener"
+                                class="pw-link">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                </svg>
+                                source code
+                            </a>
+                            <a href="#" target="_blank" rel="noopener" class="pw-link pw-link--accent">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                                live demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pw-row__img-wrap">
+                    <img src="proj_voltwise.png" alt="VoltWise" />
+                </div>
+            </div>
+
+            <!-- Project row 3: MTT with carousel -->
+            <div class="pw-row">
+                <div class="pw-row__left">
+                    <span class="pw-row__num">03</span>
+                    <div class="pw-row__info">
+                        <h3 class="pw-row__title">Multi-Target Tracking</h3>
+                        <p class="pw-row__desc">Complete MTT pipeline using LAPJV for data association and Kalman Filter
+                            for state estimation. Implemented during internship at Turkish Aerospace, Ankara.</p>
+                        <div class="pw-row__stack"><span>Python</span><span>Kalman
+                                Filter</span><span>LAPJV</span><span>Data Fusion</span><span>NumPy</span></div>
+                        <div class="pw-row__links">
+                            <a href="https://github.com/MalvinAthallahsyah" target="_blank" rel="noopener"
+                                class="pw-link">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                </svg>
+                                source code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pw-row__img-wrap pw-row__img-wrap--carousel proj-card__carousel">
+                    <div class="carousel-track">
+                        <img src="proj_mtt1.png" alt="MTT Ground Truth vs KF Tracks" class="carousel-img" />
+                        <img src="proj_mtt2.png" alt="MTT Cost Matrix Heatmap" class="carousel-img" />
+                    </div>
+                    <button class="carousel-btn carousel-btn--prev" aria-label="Previous"><svg width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg></button>
+                    <button class="carousel-btn carousel-btn--next" aria-label="Next"><svg width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg></button>
+                    <div class="carousel-dots"><span class="carousel-dot active"></span><span
+                            class="carousel-dot"></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── SKILLS SECTION ─── -->
+    <section id="skillsSection" class="page-section">
+        <div class="section-container section-container--wide">
+            <div class="sk-header">
+                <span class="pw-label">// tech_stack</span>
+            </div>
+            <h2 class="sk-title">What I work with</h2>
+
+            <div class="sk-rows">
+                <div class="sk-row">
+                    <span class="sk-row__cat">Backend &amp; APIs</span>
+                    <div class="sk-row__chips">
+                        <span>Go</span><span>Python</span><span>PHP</span><span>Laravel</span><span>Node.js</span><span>REST
+                            API</span><span>Microservices</span></div>
+                </div>
+                <div class="sk-row">
+                    <span class="sk-row__cat">Database</span>
+                    <div class="sk-row__chips"><span>PostgreSQL</span><span>MySQL</span><span>Redis</span><span>Query
+                            Optimization</span></div>
+                </div>
+                <div class="sk-row">
+                    <span class="sk-row__cat">Algorithms &amp; AI</span>
+                    <div class="sk-row__chips"><span class="sk-chip--hi">Kalman Filter</span><span
+                            class="sk-chip--hi">LAPJV</span><span class="sk-chip--hi">Data Fusion</span><span
+                            class="sk-chip--hi">MTT</span><span>NumPy</span><span>Pandas</span></div>
+                </div>
+                <div class="sk-row">
+                    <span class="sk-row__cat">DevOps &amp; Cloud</span>
+                    <div class="sk-row__chips">
+                        <span>Docker</span><span>Git</span><span>Linux</span><span>CI/CD</span><span>GitHub
+                            Actions</span></div>
+                </div>
+                <div class="sk-row">
+                    <span class="sk-row__cat">Languages</span>
+                    <div class="sk-row__chips">
+                        <span>Python</span><span>Go</span><span>PHP</span><span>JavaScript</span><span>TypeScript</span><span>SQL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CONTACT SECTION ─── -->
+    <section id="contactSection" class="page-section">
+        <div class="section-container section-container--wide">
+            <span class="pw-label">// get_in_touch</span>
+            <h2 class="ct-title">Let's build<br><em class="hero-title__glow">something.</em></h2>
+
+            <div class="ct-body">
+                <div class="ct-channels">
+                    <a href="mailto:malvinathallahsyah04@gmail.com" class="ct-channel">
+                        <span class="ct-channel__label">email</span>
+                        <span class="ct-channel__val">malvinathallahsyah04@gmail.com</span>
+                        <svg class="ct-channel__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/athallahsyah._" target="_blank" rel="noopener"
+                        class="ct-channel">
+                        <span class="ct-channel__label">instagram</span>
+                        <span class="ct-channel__val">@athallahsyah._</span>
+                        <svg class="ct-channel__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/malvinathallahsyah" target="_blank" rel="noopener"
+                        class="ct-channel">
+                        <span class="ct-channel__label">linkedin</span>
+                        <span class="ct-channel__val">Malvin Athallahsyah</span>
+                        <svg class="ct-channel__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                    </a>
+                    <div class="ct-channel ct-channel--plain">
+                        <span class="ct-channel__label">location</span>
+                        <span class="ct-channel__val">Bandung, ID · Remote Available</span>
+                    </div>
+                </div>
+
+                <form class="ct-form" id="contactForm" onsubmit="return false;">
+                    <div class="ct-field">
+                        <input type="text" id="contactName" class="ct-input" placeholder=" " autocomplete="name" />
+                        <label for="contactName" class="ct-input-label">Name</label>
+                    </div>
+                    <div class="ct-field">
+                        <input type="email" id="contactEmail" class="ct-input" placeholder=" " autocomplete="email" />
+                        <label for="contactEmail" class="ct-input-label">Email</label>
+                    </div>
+                    <div class="ct-field">
+                        <textarea id="contactMessage" class="ct-input ct-textarea" placeholder=" " rows="5"></textarea>
+                        <label for="contactMessage" class="ct-input-label">Message</label>
+                    </div>
+                    <button type="submit" class="ct-submit" id="contactSubmit">
+                        <span>send_message()</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
