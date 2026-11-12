@@ -11,7 +11,33 @@ document.addEventListener('DOMContentLoaded', () => {
     initCarousels();
     initContactForm();
     initCursorInteractivity();
+    initExpTabs();
 });
+
+// ========================================
+// EXPERIENCE TABS
+// ========================================
+function initExpTabs() {
+    const tabs = document.querySelectorAll('.exp-tab');
+    if (!tabs.length) return;
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active from all tabs and panels
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.exp-content').forEach(c => c.classList.remove('active'));
+
+            // Activate clicked tab
+            tab.classList.add('active');
+            const target = document.getElementById('exp' + capitalize(tab.dataset.expTab));
+            if (target) target.classList.add('active');
+        });
+    });
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 // ========================================
 // CLOCK
@@ -98,11 +124,11 @@ function initScrollNav() {
 // ========================================
 function initCarousels() {
     document.querySelectorAll('.proj-card__carousel').forEach(carousel => {
-        const track  = carousel.querySelector('.carousel-track');
-        const imgs   = carousel.querySelectorAll('.carousel-img');
-        const dots   = carousel.querySelectorAll('.carousel-dot');
-        const btnPrev = carousel.querySelector('.carousel-btn--prev');
-        const btnNext = carousel.querySelector('.carousel-btn--next');
+        const track  = carousel.querySelector('.proj-card__track');
+        const imgs   = track ? track.querySelectorAll('img') : [];
+        const dots   = carousel.querySelectorAll('.pc-dot');
+        const btnPrev = carousel.querySelector('.pc-prev');
+        const btnNext = carousel.querySelector('.pc-next');
         if (!track || imgs.length < 2) return;
 
         let current = 0;
@@ -343,7 +369,7 @@ function initContactForm() {
     if(!form) return;
     form.addEventListener('submit', e => {
         e.preventDefault();
-        const btn = document.getElementById('formSubmit');
+        const btn = document.getElementById('contactSubmit');
         const orig = btn.textContent;
         btn.textContent = 'Sent! ✓';
         btn.style.background = '#16a34a';
