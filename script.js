@@ -1,5 +1,5 @@
-// ========================================
-// PORTFOLIO — FMA Dark Theme + Single-Page Scroll
+﻿// ========================================
+// PORTFOLIO â€” FMA Dark Theme + Single-Page Scroll
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -196,7 +196,7 @@ function initCursorInteractivity() {
 }
 
 // ========================================
-// FMA BACKGROUND — Animated Transmutation Circles
+// FMA BACKGROUND â€” Animated Transmutation Circles
 // ========================================
 function initFMABackground() {
     const canvas = document.getElementById('fmaCanvas');
@@ -289,7 +289,7 @@ function initFMABackground() {
 }
 
 // ========================================
-// PARTICLES — FMA gold sparks
+// PARTICLES â€” FMA gold sparks
 // ========================================
 function initParticles() {
     const canvas = document.getElementById('particleCanvas');
@@ -362,23 +362,26 @@ function initParticles() {
 }
 
 // ========================================
-// CONTACT FORM
+// CONTACT — copy email to clipboard
 // ========================================
 function initContactForm() {
-    const form = document.getElementById('contactForm');
-    if(!form) return;
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        const btn = document.getElementById('contactSubmit');
-        const orig = btn.textContent;
-        btn.textContent = 'Sent! ✓';
-        btn.style.background = '#16a34a';
-        btn.disabled = true;
-        setTimeout(() => {
-            btn.textContent = orig;
-            btn.style.background = '';
-            btn.disabled = false;
-            form.reset();
-        }, 2500);
+    const btn = document.getElementById('copyEmailBtn');
+    const txt = document.getElementById('copyEmailTxt');
+    if (!btn || !txt) return;
+    btn.addEventListener('click', () => {
+        navigator.clipboard.writeText('malvinathallahsyah04@gmail.com').then(() => {
+            txt.textContent = 'COPIED!';
+            btn.style.borderColor = 'var(--accent-primary)';
+            btn.style.color = 'var(--accent-primary)';
+            setTimeout(() => {
+                txt.textContent = 'COPY';
+                btn.style.borderColor = '';
+                btn.style.color = '';
+            }, 2000);
+        }).catch(() => {
+            txt.textContent = 'ERROR';
+            setTimeout(() => { txt.textContent = 'COPY'; }, 2000);
+        });
     });
 }
+
