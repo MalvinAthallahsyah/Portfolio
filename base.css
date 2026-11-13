@@ -1,0 +1,25 @@
+/* ══════════════════════════════════════════════════════════════
+   BASE RESET — Malvin Athallahsyah Portfolio
+══════════════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+ul, ol { list-style: none; }
+
+input,
+textarea,
+select { font: inherit; }
+

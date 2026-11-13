@@ -1,0 +1,241 @@
+/* ══════════════════════════════════════════════════════════════
+   THE GATE OF TRUTH — Click-to-enter intro
+   Tokens scoped under --gi- so they never bleed into portfolio
+══════════════════════════════════════════════════════════════ */
+:root {
+  --gi-bg:          #0d0b09;
+  --gi-door-bg:     #141211;
+  --gi-door-ink:    #141211;   /* text on brass surface */
+  --gi-brass:       rgba(185, 138, 46, 1);
+  --gi-brass-m:     rgba(185, 138, 46, 0.35);
+  --gi-brass-f:     rgba(185, 138, 46, 0.09);
+  --gi-brass-g:     rgba(185, 138, 46, 0.6);
+  --gi-brass-xf:    rgba(185, 138, 46, 0.1);
+  --gi-brass-glow:  rgba(185, 138, 46, 0.2);
+  --gi-light-ivory: rgba(236, 227, 207, 0.22);
+  --gi-scrim:       rgba(13, 11, 9, 0.6);
+  --gi-ivory:       #ece3cf;
+  --gi-muted:       #9a9080;
+  --gi-ease:        cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ── Overlay shell ──────────────────────────────────────────── */
+#gate-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gi-bg);
+  overflow: hidden;
+  transition: opacity 0.9s var(--gi-ease);
+}
+
+#gate-intro.gi--fade   { opacity: 0; pointer-events: none; }
+#gate-intro.gi--hidden { display: none; }
+
+/* When JS is unavailable, gate content is visible and "Enter" dismissed
+   by the JS script. If JS is present (html.js), we scope hiding. */
+.js #gate-intro.gi--open .gi-content { opacity: 0; transform: scale(0.95); pointer-events: none; }
+
+/* ── Door panels (full viewport, side by side) ───────────────── */
+.gi-gate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gi-door {
+  flex: 1;
+  position: relative;
+  /*
+   * Decorative horizontal lines via repeating gradient — no extra elements
+   * Lines appear every 160 px; very subtle, adds architectural depth
+   */
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 158px,
+      var(--gi-brass-f) 158px,
+      var(--gi-brass-f) 160px
+    ),
+    var(--gi-door-bg);
+  will-change: transform;
+  transition: transform 1.5s var(--gi-ease);
+}
+
+/* Inner inset border on each panel */
+.gi-door::before {
+  content: '';
+  position: absolute;
+  inset: 2rem;
+  border: 1px solid var(--gi-brass-m);
+  pointer-events: none;
+}
+
+/* Second inner line — further inset, even subtler */
+.gi-door::after {
+  content: '';
+  position: absolute;
+  inset: 3rem;
+  border: 1px solid var(--gi-brass-xf);
+  pointer-events: none;
+}
+
+/* Left door — gold border on its right edge (the seam side) */
+.gi-door--l { border-right: 1px solid var(--gi-brass-m); }
+
+/* Right door — gold border on its left edge (the seam side) */
+.gi-door--r { border-left: 1px solid var(--gi-brass-m); }
+
+/* Open state: panels slide off-screen */
+#gate-intro.gi--open .gi-door--l { transform: translateX(-100%); }
+#gate-intro.gi--open .gi-door--r { transform: translateX(100%);  }
+
+/* ── Center seam with warm glow ─────────────────────────────── */
+.gi-seam {
+  position: absolute;
+  inset-block: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent        0%,
+    var(--gi-brass-m)  15%,
+    var(--gi-brass-g)  50%,
+    var(--gi-brass-m)  85%,
+    transparent        100%
+  );
+  box-shadow: 0 0 32px 8px var(--gi-brass-glow);
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.5s;
+}
+
+#gate-intro.gi--open .gi-seam { opacity: 0; }
+
+/* ── Light that blooms when gate opens ───────────────────────── */
+.gi-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 50%,
+    var(--gi-light-ivory) 0%,
+    var(--gi-brass-xf)   35%,
+    transparent          65%
+  );
+  transition: opacity 1.4s var(--gi-ease);
+}
+
+#gate-intro.gi--open .gi-light { opacity: 1; }
+
+/* ── Text content ────────────────────────────────────────────── */
+.gi-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.1rem;
+  padding: 2rem 2.5rem;
+  /* Subtle frosted dark backdrop — separates text from door texture */
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    var(--gi-scrim) 0%,
+    transparent     70%
+  );
+  transition: opacity 0.4s, transform 0.5s var(--gi-ease);
+}
+
+/* open state now scoped under .js (see rule 62 fix above) */
+
+.gi-eyebrow {
+  font: 400 0.7rem / 1 "JetBrains Mono", monospace;
+  color: var(--gi-brass);
+  /* no letter-spacing, no text-transform — sentence case per rule 67 */
+}
+
+.gi-title {
+  font: 400 clamp(2.6rem, 7vw, 5rem) / 1.06 "Cinzel", Georgia, serif;
+  color: var(--gi-ivory);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0.2rem 0 0;
+}
+
+.gi-motto {
+  font: 400 0.88rem / 1.6 "Inter", system-ui, sans-serif;
+  color: var(--gi-muted);
+  max-width: 36ch;
+  /* no letter-spacing — per rule 67 */
+}
+
+/* ── Enter button ────────────────────────────────────────────── */
+.gi-enter-btn {
+  margin-top: 0.7rem;
+  padding: 0.9rem 3rem;
+  font: 400 0.82rem / 1 "Cinzel", Georgia, serif;
+  /* Cinzel is display — sentence case inherits from it, no extra tracking */
+  color: var(--gi-ivory);
+  background: transparent;
+  border: 1px solid var(--gi-brass-m);
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.12s;
+}
+
+.gi-enter-btn:hover {
+  background: var(--gi-brass);
+  color: var(--gi-door-ink);
+  border-color: var(--gi-brass);
+}
+
+.gi-enter-btn:active { transform: scale(0.97); }
+
+.gi-enter-btn:focus-visible {
+  outline: 2px solid var(--gi-brass);
+  outline-offset: 4px;
+}
+
+/* ── Skip button ─────────────────────────────────────────────── */
+.gi-skip {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.8rem;
+  z-index: 20;
+  font: 400 0.72rem / 1 "Inter", system-ui, sans-serif;
+  color: var(--gi-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 0.6rem;
+  opacity: 0.65;
+  /* no letter-spacing — per rule 67 */
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.gi-skip:hover  { opacity: 1; color: var(--gi-ivory); }
+
+.gi-skip:focus-visible {
+  outline: 2px solid var(--gi-brass);
+  outline-offset: 3px;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .gi-door,
+  .gi-content,
+  .gi-light,
+  .gi-seam,
+  #gate-intro { transition: none !important; }
+}

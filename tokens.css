@@ -1,0 +1,55 @@
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — Malvin Athallahsyah Portfolio
+   Palette: dark ink / brass gold / ivory / parchment
+   Fonts: Cinzel (display) · Inter (body) · JetBrains Mono (outlier)
+══════════════════════════════════════════════════════════════ */
+:root {
+  /* ── Palette ─────────────────────────────────────────────── */
+  --color-paper:     #141211;
+  --color-paper-2:   #1e1b18;
+  --color-paper-3:   #262118;
+  --color-ink:       #ece3cf;
+  --color-ink-2:     #d9cdb4;
+  --color-muted:     #bcb19c;
+  --color-parch:     #e6d9bb;
+  --color-parch-ink: #1b1713;
+  --color-parch-dim: #5a5140;
+  --color-ivory:     #ece3cf;
+
+  /* ── Accent (brass gold) ─────────────────────────────────── */
+  --color-accent:      #b98a2e;
+  --color-accent-dk:   #8a6314;
+  --color-accent-ink:  #0f0d0b;   /* text on accent/brass fill */
+  --color-accent-tint: color-mix(in srgb, #b98a2e 14%, transparent);
+  --color-accent-hover: #cfa040;
+
+  /* ── Semantic ────────────────────────────────────────────── */
+  --color-red:    #a52f24;
+  --color-red-lt: #e3806f;
+  --color-rule:   color-mix(in srgb, #b98a2e 35%, transparent);
+  --color-focus:  #b98a2e;
+
+  /* ── Cursor / glow ───────────────────────────────────────── */
+  --color-glow-halo: color-mix(in srgb, #b98a2e 8%, transparent);
+  --color-glow-dot:  #d4a84a;
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-display: "Cinzel", Georgia, serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-outlier: "JetBrains Mono", ui-monospace, monospace;
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --hd: 4.4rem;
+
+  /* ── Z-index layers ──────────────────────────────────────── */
+  --z-canvas:  1;
+  --z-content: 10;
+  --z-nav:     100;
+  --z-cursor:  9999;
+
+  /* ── Motion ──────────────────────────────────────────────── */
+  --dur-fast: 0.15s;
+  --dur-base: 0.25s;
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
