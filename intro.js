@@ -4,6 +4,8 @@
   'use strict';
 
   var SEEN_KEY = 'gate_v1_seen';
+  function safeGet() { try { return sessionStorage.getItem(SEEN_KEY); } catch (e) { return null; } }
+  function safeSet() { try { sessionStorage.setItem(SEEN_KEY, '1'); } catch (e) {} }
   var intro    = document.getElementById('gate-intro');
   if (!intro) return;
 
@@ -11,7 +13,7 @@
   var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ── Skip immediately if already seen this session
-  if (sessionStorage.getItem(SEEN_KEY)) {
+  if (safeGet()) {
     intro.classList.add('gi--hidden');
     return;
   }
@@ -25,7 +27,7 @@
   // ── Dismiss: fade out + reveal portfolio
   function dismiss(withAnimation) {
     // Always mark seen so session won't repeat
-    sessionStorage.setItem(SEEN_KEY, '1');
+    safeSet();
 
     if (!withAnimation || still) {
       intro.classList.add('gi--hidden');

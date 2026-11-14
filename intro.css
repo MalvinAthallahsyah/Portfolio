@@ -3,19 +3,19 @@
    Tokens scoped under --gi- so they never bleed into portfolio
 ══════════════════════════════════════════════════════════════ */
 :root {
-  --gi-bg:          #0d0b09;
-  --gi-door-bg:     #141211;
-  --gi-door-ink:    #141211;   /* text on brass surface */
-  --gi-brass:       rgba(185, 138, 46, 1);
-  --gi-brass-m:     rgba(185, 138, 46, 0.35);
-  --gi-brass-f:     rgba(185, 138, 46, 0.09);
-  --gi-brass-g:     rgba(185, 138, 46, 0.6);
-  --gi-brass-xf:    rgba(185, 138, 46, 0.1);
-  --gi-brass-glow:  rgba(185, 138, 46, 0.2);
-  --gi-light-ivory: rgba(236, 227, 207, 0.22);
-  --gi-scrim:       rgba(13, 11, 9, 0.6);
-  --gi-ivory:       #ece3cf;
-  --gi-muted:       #9a9080;
+  --gi-bg:          #09151a;
+  --gi-door-bg:     #0e1e24;
+  --gi-door-ink:    #0e1e24;   /* text on mint surface */
+  --gi-brass:       rgba(202, 255, 166, 1);
+  --gi-brass-m:     rgba(202, 255, 166, 0.35);
+  --gi-brass-f:     rgba(202, 255, 166, 0.09);
+  --gi-brass-g:     rgba(202, 255, 166, 0.6);
+  --gi-brass-xf:    rgba(202, 255, 166, 0.1);
+  --gi-brass-glow:  rgba(202, 255, 166, 0.2);
+  --gi-light-ivory: rgba(247, 249, 225, 0.22);
+  --gi-scrim:       rgba(9, 21, 26, 0.6);
+  --gi-ivory:       #f7f9e1;
+  --gi-muted:       #9cc2cb;
   --gi-ease:        cubic-bezier(0.76, 0, 0.24, 1);
 }
 
@@ -165,15 +165,15 @@
 }
 
 .gi-title {
-  font: 400 clamp(2.6rem, 7vw, 5rem) / 1.06 "Cinzel", Georgia, serif;
+  font: 800 clamp(2.6rem, 7vw, 5rem) / 1.06 "Outfit", system-ui, sans-serif;
   color: var(--gi-ivory);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   text-wrap: balance;
   margin: 0.2rem 0 0;
 }
 
 .gi-motto {
-  font: 400 0.88rem / 1.6 "Inter", system-ui, sans-serif;
+  font: 400 0.88rem / 1.6 "Plus Jakarta Sans", system-ui, sans-serif;
   color: var(--gi-muted);
   max-width: 36ch;
   /* no letter-spacing — per rule 67 */
@@ -183,8 +183,8 @@
 .gi-enter-btn {
   margin-top: 0.7rem;
   padding: 0.9rem 3rem;
-  font: 400 0.82rem / 1 "Cinzel", Georgia, serif;
-  /* Cinzel is display — sentence case inherits from it, no extra tracking */
+  font: 700 0.82rem / 1 "Outfit", system-ui, sans-serif;
+  /* Outfit is display — sentence case inherits from it, no extra tracking */
   color: var(--gi-ivory);
   background: transparent;
   border: 1px solid var(--gi-brass-m);
@@ -211,7 +211,7 @@
   top: 1.5rem;
   right: 1.8rem;
   z-index: 20;
-  font: 400 0.72rem / 1 "Inter", system-ui, sans-serif;
+  font: 400 0.72rem / 1 "Plus Jakarta Sans", system-ui, sans-serif;
   color: var(--gi-muted);
   background: none;
   border: none;

@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initObservatoryNetwork();
     initScrollSpy();
     initProjectCarousel();
+    initPassport();
+    initMotion();
 });
 
 // ========================================
@@ -220,7 +222,7 @@ function initFMABackground() {
 
         ctx.translate(cx, cy);
         ctx.rotate(angle);
-        ctx.strokeStyle = 'rgba(185,138,46,0.07)';
+        ctx.strokeStyle = 'rgba(202,255,166,0.07)';
         ctx.lineWidth   = 1;
 
         [1, 0.94, 0.78, 0.48, 0.22].forEach(r => {
@@ -331,7 +333,7 @@ function initParticles() {
             ctx.globalAlpha = this.op * this.life;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.sz, 0, Math.PI * 2);
-            ctx.fillStyle = '#c4921a';
+            ctx.fillStyle = '#caffa6';
             ctx.fill();
             ctx.restore();
         }
@@ -544,4 +546,193 @@ function initObservatoryNetwork() {
     });
 
     requestAnimationFrame(tick);
+}
+
+
+// ========================================
+// PASSPORT — open/close, page tabs, stamps, tilt, photo fallback
+// ========================================
+function initPassport() {
+    const root = document.getElementById('passport');
+    if (!root) return;
+
+    const still    = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const openBtn  = root.querySelector('#ppOpen');
+    const closeBtn = root.querySelector('#ppClose');
+    const book     = root.querySelector('#ppBook');
+    const tabs     = [...root.querySelectorAll('.pp-tab')];
+    const panels   = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+    const photo    = root.querySelector('.pp-photo');
+    const img      = photo && photo.querySelector('img');
+
+    // Photo missing? Fall back to the silhouette
+    if (img) {
+        const fail = () => { img.hidden = true; };
+        img.addEventListener('error', fail);
+        if (img.complete && img.naturalWidth === 0) fail();
+    }
+
+    // ── Open / close
+    function setState(isOpen) {
+        root.dataset.state = isOpen ? 'open' : 'closed';
+        openBtn.setAttribute('aria-expanded', String(isOpen));
+        book.inert = !isOpen;
+    }
+
+    function focusTab() {
+        const sel = tabs.find(t => t.getAttribute('aria-selected') === 'true') || tabs[0];
+        sel.focus({ preventScroll: true });
+    }
+
+    function openPassport() {
+        if (root.hasAttribute('data-opening') || root.hasAttribute('data-closing')) return;
+        if (still) {
+            setState(true);
+            focusTab();
+            return;
+        }
+        // cover stays on screen and fades while the book widens out of it
+        root.setAttribute('data-opening', '');
+        setState(true);
+        focusTab();
+        setTimeout(() => root.removeAttribute('data-opening'), 1050);
+    }
+
+    function closePassport() {
+        if (root.hasAttribute('data-opening') || root.hasAttribute('data-closing')) return;
+        if (still) {
+            setState(false);
+            openBtn.focus();
+            return;
+        }
+        root.setAttribute('data-closing', '');
+        setTimeout(() => {
+            setState(false);
+            root.removeAttribute('data-closing');
+            openBtn.focus();
+        }, 680);
+    }
+
+    setState(false);
+    openBtn.addEventListener('click', openPassport);
+    closeBtn.addEventListener('click', closePassport);
+    root.addEventListener('keydown', e => { if (e.key === 'Escape' && root.dataset.state === 'open') closePassport(); });
+
+    // ── Page tabs (arrow-key navigable)
+    function select(i, focus) {
+        tabs.forEach((t, n) => {
+            const on = n === i;
+            t.setAttribute('aria-selected', String(on));
+            t.tabIndex = on ? 0 : -1;
+            panels[n].hidden = !on;
+        });
+        if (focus) tabs[i].focus();
+    }
+
+    tabs.forEach((t, i) => {
+        t.addEventListener('click', () => select(i));
+        t.addEventListener('keydown', e => {
+            let n = null;
+            if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+            if (e.key === 'ArrowLeft')  n = (i - 1 + tabs.length) % tabs.length;
+            if (e.key === 'Home') n = 0;
+            if (e.key === 'End')  n = tabs.length - 1;
+            if (n !== null) { e.preventDefault(); select(n, true); }
+        });
+    });
+
+    // ── Click a stamp to press it again
+    root.querySelectorAll('button.stamp').forEach(s => {
+        s.addEventListener('click', () => {
+            s.classList.add('is-restamp');
+            s.style.animation = 'none';
+            void s.offsetWidth;
+            s.style.animation = '';
+        });
+    });
+
+    // ── Tilt + hologram (pointer devices only)
+    if (!still && matchMedia('(hover: hover)').matches) {
+        book.addEventListener('pointermove', e => {
+            const r = book.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width  - 0.5;
+            const y = (e.clientY - r.top)  / r.height - 0.5;
+            book.style.setProperty('--ry', (x * 4).toFixed(2) + 'deg');
+            book.style.setProperty('--rx', (-y * 3).toFixed(2) + 'deg');
+        });
+        book.addEventListener('pointerleave', () => {
+            book.style.setProperty('--ry', '0deg');
+            book.style.setProperty('--rx', '0deg');
+        });
+        if (photo) {
+            photo.addEventListener('pointermove', e => {
+                const r = photo.getBoundingClientRect();
+                photo.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%');
+                photo.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%');
+            });
+        }
+    }
+}
+
+// ========================================
+// MOTION LAYER — scroll progress, hero entrance, reveals, rotating circle
+// ========================================
+function initMotion() {
+    const root  = document.documentElement;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const gate  = document.getElementById('gate-intro');
+
+    // Hero waits for the gate to open (or starts at once if it is gone)
+    const go = () => root.classList.add('hero-go');
+    if (still || !gate || gate.classList.contains('gi--hidden') || getComputedStyle(gate).display === 'none') {
+        go();
+    } else {
+        new MutationObserver((_, o) => {
+            if (gate.classList.contains('gi--fade') || gate.classList.contains('gi--hidden')) { go(); o.disconnect(); }
+        }).observe(gate, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    // Hero headline: split into words for the staggered rise
+    const h1 = document.querySelector('.hero h1');
+    if (h1 && !still) {
+        const words = h1.textContent.trim().split(/\s+/);
+        h1.setAttribute('aria-label', words.join(' '));
+        h1.innerHTML = words.map((w, i) => `<span class="w" aria-hidden="true" style="--i:${i}">${w}</span>`).join(' ');
+    }
+
+    // Scroll progress bar + slowly turning circle in the journey section
+    const bar  = document.createElement('div');
+    bar.className = 'scroll-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+    const circ = document.querySelector('.circ svg');
+    let queued = false;
+    const update = () => {
+        queued = false;
+        const max = root.scrollHeight - innerHeight;
+        bar.style.scale = (max > 0 ? scrollY / max : 0) + ' 1';
+        if (circ && !still) circ.style.rotate = (scrollY * 0.04) + 'deg';
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+
+    if (still || !('IntersectionObserver' in window)) return;
+
+    // Scroll reveals, staggered among siblings
+    const sel = '.about h2,.about .note,.about-body p,.passport,.jl,.tc,#work .wrap>h2,.proj-card,.arsenal-header,.arsenal-category-bar,.contact .wrap>*';
+    const els = [...document.querySelectorAll(sel)];
+    els.forEach(el => {
+        const sibs = [...el.parentElement.children].filter(c => c.matches(sel));
+        el.style.setProperty('--d', Math.max(0, sibs.indexOf(el)) * 90 + 'ms');
+        el.classList.add('rv');
+    });
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        io.unobserve(el);
+        el.classList.add('in');
+        // hand the element back to its own CSS once the reveal is done
+        setTimeout(() => { el.classList.remove('rv', 'in'); el.style.removeProperty('--d'); }, 1800);
+    }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(el => io.observe(el));
 }
