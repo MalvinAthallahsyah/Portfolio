@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initProjectCarousel();
     initPassport();
     initMotion();
+    initInteractive();
 });
 
 // ========================================
@@ -84,20 +85,34 @@ function initProjectCarousel() {
 // JOURNEY TABS
 // ========================================
 function initJourneyTabs() {
-    const tabs   = [...document.querySelectorAll('[role=tab]')];
+    // scoped to the journey tablist — the passport tabs (.pp-tab) have their
+    // own role=tab handling inside initPassport
+    const tabs   = [...document.querySelectorAll('.tabs [role="tab"]')];
     const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
 
-    function sel(i) {
+    function sel(i, animate) {
         tabs.forEach((t, j) => {
             t.setAttribute('aria-selected', j === i);
             t.tabIndex = j === i ? 0 : -1;
             if (panels[j]) panels[j].hidden = j !== i;
             if (panels[j]) panels[j].classList.toggle('on', j === i);
         });
+        // a freshly shown panel must never sit blank: timeline cards that the
+        // journey scroll-reveal has not shown yet appear now, staggered
+        const p = panels[i];
+        if (animate && p) {
+            [...p.querySelectorAll('.tc:not([data-tc-in])')].forEach((el, k) => {
+                el.dataset.tcIn = '1';
+                el.style.setProperty('--d', k * 90 + 'ms');
+                el.classList.add('rv');
+            });
+            requestAnimationFrame(() => requestAnimationFrame(() =>
+                [...p.querySelectorAll('.tc.rv')].forEach(el => el.classList.add('in'))));
+        }
     }
 
     tabs.forEach((t, i) => {
-        t.addEventListener('click', () => sel(i));
+        t.addEventListener('click', () => sel(i, true));
         t.addEventListener('keydown', e => {
             if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
                 const n = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
@@ -598,25 +613,38 @@ function initPassport() {
         setTimeout(() => root.removeAttribute('data-opening'), 1050);
     }
 
-    function closePassport() {
+    function closePassport(focusBack) {
         if (root.hasAttribute('data-opening') || root.hasAttribute('data-closing')) return;
         if (still) {
             setState(false);
-            openBtn.focus();
+            if (focusBack !== false) openBtn.focus({ preventScroll: true });
             return;
         }
         root.setAttribute('data-closing', '');
         setTimeout(() => {
             setState(false);
             root.removeAttribute('data-closing');
-            openBtn.focus();
-        }, 680);
+            if (focusBack !== false) openBtn.focus({ preventScroll: true });
+        }, 640);
     }
 
     setState(false);
     openBtn.addEventListener('click', openPassport);
     closeBtn.addEventListener('click', closePassport);
     root.addEventListener('keydown', e => { if (e.key === 'Escape' && root.dataset.state === 'open') closePassport(); });
+
+    // ── Auto-close when the passport scrolls mostly out of view
+    let autoQueued = false;
+    addEventListener('scroll', () => {
+        if (autoQueued || root.dataset.state !== 'open') return;
+        autoQueued = true;
+        requestAnimationFrame(() => {
+            autoQueued = false;
+            const r = root.getBoundingClientRect();
+            const visible = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+            if (root.dataset.state === 'open' && visible < r.height * 0.25) closePassport(false);
+        });
+    }, { passive: true });
 
     // ── Page tabs (arrow-key navigable)
     function select(i, focus) {
@@ -719,7 +747,8 @@ function initMotion() {
     if (still || !('IntersectionObserver' in window)) return;
 
     // Scroll reveals, staggered among siblings
-    const sel = '.about h2,.about .note,.about-body p,.passport,.jl,.tc,#work .wrap>h2,.proj-card,.arsenal-header,.arsenal-category-bar,.contact .wrap>*';
+    // (journey .jl/.tc are revealed as one unit further below)
+    const sel = '.about h2,.about .note,.about-body p,.passport,#work .wrap>h2,.proj-card,.arsenal-header,.arsenal-category-bar,.contact .wrap>*';
     const els = [...document.querySelectorAll(sel)];
     els.forEach(el => {
         const sibs = [...el.parentElement.children].filter(c => c.matches(sel));
@@ -735,4 +764,74 @@ function initMotion() {
         setTimeout(() => { el.classList.remove('rv', 'in'); el.style.removeProperty('--d'); }, 1800);
     }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
     els.forEach(el => io.observe(el));
+
+    // Journey: the label column + the visible panel's timeline cards reveal
+    // as one unit when the section enters the viewport (per-card observation
+    // could leave the timeline blank)
+    const journey = document.getElementById('journey');
+    if (journey) {
+        const jio = new IntersectionObserver(entries => entries.forEach(e => {
+            if (!e.isIntersecting) return;
+            jio.disconnect();
+            const jl    = journey.querySelector('.jl');
+            const cards = [...journey.querySelectorAll('.panel.on .tc')].filter(el => !el.dataset.tcIn);
+            const unit  = jl ? [jl, ...cards] : cards;
+            unit.forEach((el, k) => {
+                if (el !== jl) el.dataset.tcIn = '1';
+                el.style.setProperty('--d', k * 90 + 'ms');
+                el.classList.add('rv');
+            });
+            requestAnimationFrame(() => requestAnimationFrame(() =>
+                unit.forEach(el => el.classList.add('in'))));
+            setTimeout(() => unit.forEach(el => {
+                el.classList.remove('rv', 'in');
+                el.style.removeProperty('--d');
+            }), 1800);
+        }), { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+        jio.observe(journey);
+    }
+}
+
+// ========================================
+// INTERACTIVE LAYER — magnetic buttons, project-card tilt + glare
+// fine pointers only, skipped under prefers-reduced-motion;
+// CSS side lives at the end of styles.css (.mag / .tilt)
+// ========================================
+function initInteractive() {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Magnetic pull: buttons lean toward the cursor, spring back on leave
+    document.querySelectorAll('.btn, .tab, .pp-tab, .pp-close, .pj-cr__btn, .gi-enter-btn').forEach(el => {
+        el.classList.add('mag');
+        el.addEventListener('pointermove', e => {
+            const r = el.getBoundingClientRect();
+            const x = (e.clientX - r.left - r.width / 2) * 0.2;
+            const y = (e.clientY - r.top  - r.height / 2) * 0.2;
+            el.style.setProperty('--mag-x', Math.max(-9, Math.min(9, x)).toFixed(1) + 'px');
+            el.style.setProperty('--mag-y', Math.max(-9, Math.min(9, y)).toFixed(1) + 'px');
+        });
+        el.addEventListener('pointerleave', () => {
+            el.style.setProperty('--mag-x', '0px');
+            el.style.setProperty('--mag-y', '0px');
+        });
+    });
+
+    // Project cards: subtle 3D tilt + a soft mint glare that follows the cursor
+    document.querySelectorAll('.proj-card').forEach(card => {
+        card.classList.add('tilt');
+        card.addEventListener('pointermove', e => {
+            const r  = card.getBoundingClientRect();
+            const nx = (e.clientX - r.left) / r.width  - 0.5;
+            const ny = (e.clientY - r.top)  / r.height - 0.5;
+            card.style.setProperty('--tx', (-ny * 4).toFixed(2) + 'deg');
+            card.style.setProperty('--ty', ( nx * 5).toFixed(2) + 'deg');
+            card.style.setProperty('--gx', ((nx + 0.5) * 100).toFixed(1) + '%');
+            card.style.setProperty('--gy', ((ny + 0.5) * 100).toFixed(1) + '%');
+        });
+        card.addEventListener('pointerleave', () => {
+            card.style.setProperty('--tx', '0deg');
+            card.style.setProperty('--ty', '0deg');
+        });
+    });
 }

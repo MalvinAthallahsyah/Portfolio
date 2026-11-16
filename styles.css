@@ -2019,8 +2019,8 @@ footer {
   from { clip-path: inset(-10px -20px -80px -20px round 3cqw); }
   to   { clip-path: inset(0 25% 0 25% round 3cqw); }
 }
-.about .pp-book { animation: pp-widen 1s cubic-bezier(0.45, 0, 0.2, 1); }
-.passport[data-closing] .pp-book { animation: pp-narrow 0.65s cubic-bezier(0.45, 0, 0.2, 1) both; }
+.about .pp-book { animation: pp-widen 1s cubic-bezier(0.22, 1, 0.36, 1); }
+.passport[data-closing] .pp-book { animation: pp-narrow 0.6s cubic-bezier(0.4, 0, 0.2, 1) both; }
 
 .passport[data-opening] .pp-cover {
   z-index: 2;
@@ -2030,3 +2030,55 @@ footer {
 }
 .passport[data-closing] .pp-cover { z-index: 2; }
 .passport[data-opening] .pp-panel:not([hidden]) .pp-page:nth-child(2) { animation-delay: 0.3s; }
+
+/* ── passport: compositor hints for a smoother open/close ────── */
+.pp-cover { will-change: transform, opacity; }
+.pp-book  { will-change: transform, opacity, clip-path; }
+.about .pp-panel:not([hidden]) .pp-page:nth-child(2) { will-change: transform, opacity; }
+
+/* ══════════════════════════════════════════════════════════════
+   INTERACTIVE LAYER — magnetic buttons, project-card tilt + glare
+   The .mag / .tilt classes and --mag-* / --tx / --ty / --gx / --gy
+   vars are added by script.js only for fine pointers with motion
+   allowed, so touch devices and reduced-motion users get the
+   plain layout.
+══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: no-preference) {
+  /* magnetic pull. ".mag.mag" doubles the specificity so this shared
+     transition also wins over .gi-enter-btn in intro.css (loaded later);
+     every target's own hover fades are re-listed so they keep working */
+  .mag.mag {
+    translate: var(--mag-x, 0px) var(--mag-y, 0px);
+    transition:
+      translate 0.28s var(--ease-out),
+      background-color var(--dur-base) var(--ease-out),
+      background var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform 0.12s;
+  }
+
+  /* project cards: tilt toward the cursor (kept small, ≤ ~2.5deg) */
+  .tilt {
+    position: relative;
+    transform: perspective(900px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+    transition: transform 0.3s var(--ease-out),
+                background var(--dur-base) var(--ease-out),
+                box-shadow 0.3s var(--ease-out);
+  }
+  .tilt:hover { box-shadow: 0 22px 38px -24px rgba(14, 30, 36, 0.5); }
+
+  /* soft mint glare following the cursor */
+  .tilt::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(320px circle at var(--gx, 50%) var(--gy, 50%),
+                rgba(202, 255, 166, 0.12), transparent 62%);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-out);
+    pointer-events: none;
+  }
+  .tilt:hover::after { opacity: 1; }
+}

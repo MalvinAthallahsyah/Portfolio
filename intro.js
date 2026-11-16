@@ -19,7 +19,12 @@
   }
 
   // ── Lock scroll while gate is showing
-  document.body.style.overflow = 'hidden';
+  // styles.css sets html { overflow-x: clip }, which disables the normal
+  // body→viewport overflow hand-off — so the lock goes on <html> itself.
+  // Also snap to the top: the gate is opaque and a mid-page restore
+  // position would sit hidden behind it.
+  document.documentElement.classList.add('gate-locked');
+  document.documentElement.scrollTop = 0;
 
   var enterBtn = document.getElementById('gi-enter');
   var skipBtn  = document.getElementById('gi-skip');
@@ -31,7 +36,7 @@
 
     if (!withAnimation || still) {
       intro.classList.add('gi--hidden');
-      document.body.style.overflow = '';
+      document.documentElement.classList.remove('gate-locked');
       return;
     }
 
@@ -46,7 +51,7 @@
     // 3. Fully hide once fade completes
     setTimeout(function () {
       intro.classList.add('gi--hidden');
-      document.body.style.overflow = '';
+      document.documentElement.classList.remove('gate-locked');
     }, 2100);
   }
 

@@ -19,6 +19,15 @@
   --gi-ease:        cubic-bezier(0.76, 0, 0.24, 1);
 }
 
+/* ── Scroll lock while the gate is showing ────────────────────
+   styles.css sets html { overflow-x: clip }, which stops the normal
+   body→viewport overflow hand-off — so the lock goes on <html>
+   itself (class added/removed by intro.js on every dismiss path). */
+html.gate-locked,
+html.gate-locked body {
+  overflow: hidden;
+}
+
 /* ── Overlay shell ──────────────────────────────────────────── */
 #gate-intro {
   position: fixed;
